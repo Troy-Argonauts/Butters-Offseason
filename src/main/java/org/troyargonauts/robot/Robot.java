@@ -6,6 +6,11 @@
 package org.troyargonauts.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -98,6 +103,19 @@ public class Robot extends TimedRobot {
                 wrist.run();
             }
         }, 100, 10, TimeUnit.MILLISECONDS);
+        DataLogManager.start();
+        // Set up custom log entries
+        DataLog log = DataLogManager.getLog();
+        BooleanLogEntry myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
+        DoubleLogEntry myDriveAngleLog = new DoubleLogEntry(log, "/Drive/Angle");
+        StringLogEntry myStringLog = new StringLogEntry(log, "/my/string");
+        //DriverStation.startDataLog(DataLogManager.getLog());
+        // (alternatively) Record only DS control data
+        //DriverStation.startDataLog(DataLogManager.getLog(), false);
+        // Only log when necessary
+        myBooleanLog.append(true);
+        myStringLog.append("wow!");
+        System.out.println(myStringLog);
     }
 
     @Override
