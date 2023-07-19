@@ -91,6 +91,7 @@ public class RobotContainer {
                             double armSpeed = IStream.create(operator::getRightY)
                                     .filtered(x -> OMath.deadband(x, Constants.DriveTrain.DEADBAND))
                                     .get();
+                            //Robot.getArm().rawPower(armSpeed);
                             Robot.getArm().setPower(armSpeed);
                         }, Robot.getArm()
                 )
