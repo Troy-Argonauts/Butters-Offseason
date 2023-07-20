@@ -44,6 +44,8 @@ public class Robot extends TimedRobot {
     private boolean hasWristLimitBeenPressed = false;
     private Command autonomousCommand;
 
+    private static DataLogging dataLogger;
+
     public static LEDSystem getLEDSystem() {
         if (ledSystem == null) ledSystem = new LEDSystem();
         return ledSystem;
@@ -54,8 +56,7 @@ public class Robot extends TimedRobot {
         LiveWindow.disableAllTelemetry();
         LiveWindow.setEnabled(false);
 
-//        DataLogManager.start("/media/sda1/logs");
-
+        dataLogger = new DataLogging();
         driveTrain = new DriveTrain();
         arm = new Arm();
         elevator = new Elevator();
@@ -103,24 +104,17 @@ public class Robot extends TimedRobot {
                 wrist.run();
             }
         }, 100, 10, TimeUnit.MILLISECONDS);
-        DataLogManager.start();
-        // Set up custom log entries
-        DataLog log = DataLogManager.getLog();
-        BooleanLogEntry myBooleanLog = new BooleanLogEntry(log, "/my/boolean");
-        DoubleLogEntry myDriveAngleLog = new DoubleLogEntry(log, "/Drive/Angle");
-        StringLogEntry myStringLog = new StringLogEntry(log, "/my/string");
-        //DriverStation.startDataLog(DataLogManager.getLog());
-        // (alternatively) Record only DS control data
-        //DriverStation.startDataLog(DataLogManager.getLog(), false);
-        // Only log when necessary
-        myBooleanLog.append(true);
-        myStringLog.append("wow!");
-        System.out.println(myStringLog);
+
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        double[] yawPitchRoll = new double[3];
+        Robot.getDataLogger().getPigeon().getYawPitchRoll(yawPitchRoll);
+        double positionData = Robot.getDrivetrain().getPosition();
+        double angleData = Robot.getDrivetrain().getAngle();
+        dataLogger.logData(yawPitchRoll, positionData, angleData);
     }
 
     @Override
@@ -129,6 +123,7 @@ public class Robot extends TimedRobot {
 //        arm.setDesiredTarget(Arm.ArmState.HOME);
 //        wrist.setDesiredTarget(Wrist.WristState.HOME);
 //        elevator.setDesiredTarget(Elevator.ElevatorState.HOME);
+        dataLogger.close();
     }
 
     @Override
@@ -180,6 +175,11 @@ public class Robot extends TimedRobot {
     public static Elevator getElevator() {
         if (elevator == null) elevator = new Elevator();
         return elevator;
+    }
+
+    public static DataLogging getDataLogger(){
+        if(dataLogger == null) dataLogger = new DataLogging();
+        return dataLogger;
     }
     public void resetAllEncoders() {
         driveTrain.resetEncoders();
