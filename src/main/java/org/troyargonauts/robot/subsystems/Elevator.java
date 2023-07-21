@@ -64,11 +64,18 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("elevator Desired", desiredTarget);
 
         SmartDashboard.putBoolean("Down limit elevator", !bottomLimitSwitch.get());
+        SmartDashboard.putBoolean("Upper limit elevator", !upperLimitSwitch.get());
         SmartDashboard.putNumber("elevator output", elevatorMotor.getOutputCurrent());
+        SmartDashboard.putNumber("elevator app output", elevatorMotor.getAppliedOutput());
 
         if (!bottomLimitSwitch.get()) {
             resetEncoders();
         }
+
+        if (!upperLimitSwitch.get()) {
+            elevatorMotor.getEncoder().setPosition(221);
+        }
+
     }
 
     public void run() {
