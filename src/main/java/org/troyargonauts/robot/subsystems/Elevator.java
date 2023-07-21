@@ -38,7 +38,7 @@ public class Elevator extends SubsystemBase {
 
        // elevatorMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 7);
 
-        elevatorMotor.setSmartCurrentLimit(100);
+        elevatorMotor.setSmartCurrentLimit(110);
 
         elevatorMotor.getEncoder().setPositionConversionFactor(ELEVATOR_GEARBOX_SCALE);
 
