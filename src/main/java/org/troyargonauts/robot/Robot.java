@@ -6,6 +6,11 @@
 package org.troyargonauts.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -39,6 +44,8 @@ public class Robot extends TimedRobot {
     private boolean hasWristLimitBeenPressed = false;
     private Command autonomousCommand;
 
+    private static DataLogging dataLogger;
+
     public static LEDSystem getLEDSystem() {
         if (ledSystem == null) ledSystem = new LEDSystem();
         return ledSystem;
@@ -49,8 +56,7 @@ public class Robot extends TimedRobot {
         LiveWindow.disableAllTelemetry();
         LiveWindow.setEnabled(false);
 
-//        DataLogManager.start("/media/sda1/logs");
-
+        dataLogger = new DataLogging();
         driveTrain = new DriveTrain();
         arm = new Arm();
         elevator = new Elevator();
@@ -98,11 +104,17 @@ public class Robot extends TimedRobot {
                 wrist.run();
             }
         }, 100, 10, TimeUnit.MILLISECONDS);
+
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        double[] yawPitchRoll = new double[3];
+        Robot.getDataLogger().getPigeon().getYawPitchRoll(yawPitchRoll);
+        double positionData = Robot.getDrivetrain().getPosition();
+        double angleData = Robot.getDrivetrain().getAngle();
+        dataLogger.logData(yawPitchRoll, positionData, angleData);
     }
 
     @Override
@@ -111,6 +123,7 @@ public class Robot extends TimedRobot {
 //        arm.setDesiredTarget(Arm.ArmState.HOME);
 //        wrist.setDesiredTarget(Wrist.WristState.HOME);
 //        elevator.setDesiredTarget(Elevator.ElevatorState.HOME);
+        dataLogger.close();
     }
 
     @Override
@@ -162,6 +175,11 @@ public class Robot extends TimedRobot {
     public static Elevator getElevator() {
         if (elevator == null) elevator = new Elevator();
         return elevator;
+    }
+
+    public static DataLogging getDataLogger(){
+        if(dataLogger == null) dataLogger = new DataLogging();
+        return dataLogger;
     }
     public void resetAllEncoders() {
         driveTrain.resetEncoders();
