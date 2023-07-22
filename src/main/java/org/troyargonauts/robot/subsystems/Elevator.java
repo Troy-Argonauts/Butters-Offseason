@@ -1,10 +1,8 @@
 package org.troyargonauts.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.troyargonauts.common.motors.MotorCreation;
 import org.troyargonauts.common.motors.wrappers.LazyCANSparkMax;
@@ -38,7 +36,7 @@ public class Elevator extends SubsystemBase {
 
        // elevatorMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 7);
 
-        elevatorMotor.setSmartCurrentLimit(110);
+        elevatorMotor.setSmartCurrentLimit(100);
 
         elevatorMotor.getEncoder().setPositionConversionFactor(ELEVATOR_GEARBOX_SCALE);
 
@@ -49,7 +47,7 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.getPIDController().setI(ELEV_I);
         elevatorMotor.getPIDController().setD(ELEV_D);
 
-        elevatorMotor.getPIDController().setOutputRange(-0.4, 0.4);
+        elevatorMotor.getPIDController().setOutputRange(-0.45, 0.45);
     }
 
     /**
@@ -70,12 +68,12 @@ public class Elevator extends SubsystemBase {
 
         if (!bottomLimitSwitch.get()) {
             resetEncoders();
+            elevatorMotor.set(0);
         }
 
         if (!upperLimitSwitch.get()) {
-            elevatorMotor.getEncoder().setPosition(221);
+            elevatorMotor.getEncoder().setPosition(ElevatorState.MAX.getEncoderPosition());
         }
-
     }
 
     public void run() {
@@ -107,7 +105,7 @@ public class Elevator extends SubsystemBase {
         HOME(0),
         INITIAL_MOVEMENT(101),
         MIDDLE(200),
-        HIGH(221),
+        MAX(221),
         HUMAN_PLAYER(30);
         final double encoderPosition;
 
