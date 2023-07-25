@@ -6,11 +6,6 @@
 package org.troyargonauts.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.util.datalog.BooleanLogEntry;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -110,11 +105,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        double[] yawPitchRoll = new double[3];
-        Robot.getDataLogger().getPigeon().getYawPitchRoll(yawPitchRoll);
-        double positionData = Robot.getDrivetrain().getPosition();
-        double angleData = Robot.getDrivetrain().getAngle();
-        dataLogger.logData(yawPitchRoll, positionData, angleData);
     }
 
     @Override
@@ -123,7 +113,7 @@ public class Robot extends TimedRobot {
 //        arm.setDesiredTarget(Arm.ArmState.HOME);
 //        wrist.setDesiredTarget(Wrist.WristState.HOME);
 //        elevator.setDesiredTarget(Elevator.ElevatorState.HOME);
-        dataLogger.close();
+//        dataLogger.close();
     }
 
     @Override

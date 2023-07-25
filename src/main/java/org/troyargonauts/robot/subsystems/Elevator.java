@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase {
 
        // elevatorMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 7);
 
-        elevatorMotor.setSmartCurrentLimit(100);
+        elevatorMotor.setSmartCurrentLimit(40);
 
         elevatorMotor.getEncoder().setPositionConversionFactor(ELEVATOR_GEARBOX_SCALE);
 
@@ -47,7 +47,7 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.getPIDController().setI(ELEV_I);
         elevatorMotor.getPIDController().setD(ELEV_D);
 
-        elevatorMotor.getPIDController().setOutputRange(-0.45, 0.45);
+        elevatorMotor.getPIDController().setOutputRange(-0.35, 0.35);
     }
 
     /**
@@ -103,10 +103,10 @@ public class Elevator extends SubsystemBase {
     public enum ElevatorState {
 
         HOME(0),
-        INITIAL_MOVEMENT(101),
-        MIDDLE(200),
-        MAX(221),
-        HUMAN_PLAYER(30);
+        INITIAL_MOVEMENT(168),
+        MIDDLE(333),
+        MAX(350),
+        HUMAN_PLAYER(50);
         final double encoderPosition;
 
         ElevatorState(double encoderPosition) {

@@ -121,4 +121,8 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    public boolean isPIDFinished() {
+        return Math.abs(desiredTarget - armMotor.getEncoder().getPosition()) <= 50;
+    }
+
 }

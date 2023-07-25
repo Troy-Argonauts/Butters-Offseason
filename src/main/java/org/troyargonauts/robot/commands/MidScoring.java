@@ -14,6 +14,7 @@ public class MidScoring extends SequentialCommandGroup {
         super(
                 new InstantCommand(() -> System.out.println("Mid Scoring")),
                 new InstantCommand(() -> Robot.getElevator().setDesiredTarget(Elevator.ElevatorState.INITIAL_MOVEMENT), Robot.getElevator()),
+                new WaitUntilCommand(() -> Robot.getElevator().isPIDFinished()),
                 new InstantCommand(() -> Robot.getElevator().setDesiredTarget(Elevator.ElevatorState.MIDDLE), Robot.getElevator()),
                 new WaitUntilCommand(() -> Robot.getElevator().isPIDFinished()),
                 new InstantCommand(() -> Robot.getWrist().setDesiredTarget(Wrist.WristState.MIDDLE), Robot.getWrist())
