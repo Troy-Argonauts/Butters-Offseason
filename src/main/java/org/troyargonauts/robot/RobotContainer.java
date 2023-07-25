@@ -46,7 +46,7 @@ public class RobotContainer {
                             double angle = IStream.create(driver::getRightX)
                                     .filtered(x -> OMath.deadband(x, Constants.DriveTrain.DEADBAND))
                                     .get();
-                            Robot.getDrivetrain().cheesyDrive(speed, angle, 1);
+                            Robot.getDrivetrain().cheesyDrive(Math.copySign((speed * speed), speed), (angle * 0.85), 0.8);
                         }, Robot.getDrivetrain()
                 )
         );
@@ -91,6 +91,7 @@ public class RobotContainer {
                             double armSpeed = IStream.create(operator::getRightY)
                                     .filtered(x -> OMath.deadband(x, Constants.DriveTrain.DEADBAND))
                                     .get();
+                            //Robot.getArm().rawPower(armSpeed);
                             Robot.getArm().setPower(armSpeed);
                         }, Robot.getArm()
                 )

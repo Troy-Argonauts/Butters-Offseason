@@ -77,6 +77,10 @@ public class Arm extends SubsystemBase {
         System.out.println("Arm Desired: " + desiredTarget);
     }
 
+    public void rawPower(double speed) {
+        armMotor.set(speed);
+    }
+
     /**
      * Sets Elbow to the joystick value given it is within encoder limits.
      *
@@ -115,6 +119,10 @@ public class Arm extends SubsystemBase {
         public int getEncoderPosition() {
             return encoderPosition;
         }
+    }
+
+    public boolean isPIDFinished() {
+        return Math.abs(desiredTarget - armMotor.getEncoder().getPosition()) <= 50;
     }
 
 }

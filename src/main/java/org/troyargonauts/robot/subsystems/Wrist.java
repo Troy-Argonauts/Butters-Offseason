@@ -80,13 +80,13 @@ public class Wrist extends SubsystemBase {
 	public void setIntakeState(IntakeState state) {
 		switch(state) {
 			case FORWARD:
-				rotateMotor.set(0.5);
+				rotateMotor.set(0.4);
 				break;
 			case OFF:
 				rotateMotor.set(0);
 				break;
 			case BACKWARD:
-				rotateMotor.set(-0.5);
+				rotateMotor.set(-0.4);
 				break;
 		}
 	}
@@ -101,7 +101,7 @@ public class Wrist extends SubsystemBase {
 	public enum WristState {
 		INITIAL_HOME(-800),
 		MIDDLE(1000),
-		FLOOR_PICKUP(445),
+		FLOOR_PICKUP(305), //past: 445
 		HYBRID_SCORE(1115),
 		HOME(0),
 		HIGH_CUBE(473),

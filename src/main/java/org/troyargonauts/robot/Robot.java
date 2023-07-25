@@ -123,7 +123,7 @@ public class Robot extends TimedRobot {
 //        arm.setDesiredTarget(Arm.ArmState.HOME);
 //        wrist.setDesiredTarget(Wrist.WristState.HOME);
 //        elevator.setDesiredTarget(Elevator.ElevatorState.HOME);
-        dataLogger.close();
+//        dataLogger.close();
     }
 
     @Override

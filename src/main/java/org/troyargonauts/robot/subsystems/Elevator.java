@@ -1,10 +1,8 @@
 package org.troyargonauts.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.troyargonauts.common.motors.MotorCreation;
 import org.troyargonauts.common.motors.wrappers.LazyCANSparkMax;
@@ -36,7 +34,9 @@ public class Elevator extends SubsystemBase {
 
         elevatorMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        elevatorMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 7);
+       // elevatorMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 7);
+
+        elevatorMotor.setSmartCurrentLimit(40);
 
         elevatorMotor.getEncoder().setPositionConversionFactor(ELEVATOR_GEARBOX_SCALE);
 
@@ -47,7 +47,7 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.getPIDController().setI(ELEV_I);
         elevatorMotor.getPIDController().setD(ELEV_D);
 
-        elevatorMotor.getPIDController().setOutputRange(-0.4, 0.4);
+        elevatorMotor.getPIDController().setOutputRange(-0.35, 0.35);
     }
 
     /**
@@ -62,10 +62,17 @@ public class Elevator extends SubsystemBase {
         SmartDashboard.putNumber("elevator Desired", desiredTarget);
 
         SmartDashboard.putBoolean("Down limit elevator", !bottomLimitSwitch.get());
+        SmartDashboard.putBoolean("Upper limit elevator", !upperLimitSwitch.get());
         SmartDashboard.putNumber("elevator output", elevatorMotor.getOutputCurrent());
+        SmartDashboard.putNumber("elevator app output", elevatorMotor.getAppliedOutput());
 
         if (!bottomLimitSwitch.get()) {
             resetEncoders();
+            elevatorMotor.set(0);
+        }
+
+        if (!upperLimitSwitch.get()) {
+            elevatorMotor.getEncoder().setPosition(ElevatorState.MAX.getEncoderPosition());
         }
     }
 
@@ -96,10 +103,10 @@ public class Elevator extends SubsystemBase {
     public enum ElevatorState {
 
         HOME(0),
-        INITIAL_MOVEMENT(101),
-        MIDDLE(200),
-        HIGH(221),
-        HUMAN_PLAYER(30);
+        INITIAL_MOVEMENT(168),
+        MIDDLE(333),
+        MAX(350),
+        HUMAN_PLAYER(50);
         final double encoderPosition;
 
         ElevatorState(double encoderPosition) {
