@@ -15,10 +15,10 @@ public class DataLogging extends SubsystemBase {
     private Pigeon2 pigeon;
 
     public DataLogging() {
-        logFile = new File("/home/lvuser/data_log.csv"); // Replace the path with the desired file location
+        logFile = new File("/home/lvuser/data_log.wpilog"); // Replace the path with the desired file location
         try {
             logWriter = new FileWriter(logFile);
-            logWriter.write("Time,Yaw,Pitch,Roll,OtherData1,OtherData2\n"); // Add more columns as needed
+            logWriter.write("Position,OtherData1,OtherData2\n"); // Add more columns as needed
         } catch (IOException e) {
             e.printStackTrace();
         }
