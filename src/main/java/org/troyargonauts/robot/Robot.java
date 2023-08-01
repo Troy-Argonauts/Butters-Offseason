@@ -110,11 +110,11 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        double[] yawPitchRoll = new double[3];
-        Robot.getDataLogger().getPigeon().getYawPitchRoll(yawPitchRoll);
+        //double[] yawPitchRoll = new double[3];
+        //Robot.getDataLogger().getPigeon().getYawPitchRoll(yawPitchRoll);
         double positionData = Robot.getDrivetrain().getPosition();
-        double angleData = Robot.getDrivetrain().getAngle();
-        dataLogger.logData(yawPitchRoll, positionData, angleData);
+        //double angleData = Robot.getDrivetrain().getAngle();
+        dataLogger.logData(positionData);
     }
 
     @Override

@@ -26,9 +26,9 @@ public class DataLogging extends SubsystemBase {
 
     public void logData(double[] yawPitchRoll, double otherData1, double otherData2) {
         // Log data to SmartDashboard
-        SmartDashboard.putNumber("Yaw", yawPitchRoll[0]);
-        SmartDashboard.putNumber("Pitch", yawPitchRoll[1]);
-        SmartDashboard.putNumber("Roll", yawPitchRoll[2]);
+//        SmartDashboard.putNumber("Yaw", yawPitchRoll[0]);
+//        SmartDashboard.putNumber("Pitch", yawPitchRoll[1]);
+//        SmartDashboard.putNumber("Roll", yawPitchRoll[2]);
 
         // Log data to the file
         try {
@@ -56,5 +56,21 @@ public class DataLogging extends SubsystemBase {
 
     public Pigeon2 getPigeon() {
         return pigeon;
+    }
+    public void logData(double otherData1) {
+        // Log data to SmartDashboard
+//        SmartDashboard.putNumber("Yaw", yawPitchRoll[0]);
+//        SmartDashboard.putNumber("Pitch", yawPitchRoll[1]);
+//        SmartDashboard.putNumber("Roll", yawPitchRoll[2]);
+
+        // Log data to the file
+        try {
+            logWriter.write(
+                    System.currentTimeMillis() + "," + // Log the timestamp
+                            otherData1 + ","
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
