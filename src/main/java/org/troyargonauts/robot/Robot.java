@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
     private boolean hasWristLimitBeenPressed = false;
     private Command autonomousCommand;
 
-    private static DataLogging dataLogger;
+    //private static DataLogging dataLogger;
 
     private static DoubleLogEntry myDoubleLog;
 
