@@ -46,6 +46,8 @@ public class Robot extends TimedRobot {
 
     private static DataLogging dataLogger;
 
+    private static DoubleLogEntry myDoubleLog;
+
     public static LEDSystem getLEDSystem() {
         if (ledSystem == null) ledSystem = new LEDSystem();
         return ledSystem;
@@ -56,7 +58,7 @@ public class Robot extends TimedRobot {
         LiveWindow.disableAllTelemetry();
         LiveWindow.setEnabled(false);
 
-        dataLogger = new DataLogging();
+        //dataLogger = new DataLogging();
         driveTrain = new DriveTrain();
         arm = new Arm();
         elevator = new Elevator();
@@ -105,6 +107,10 @@ public class Robot extends TimedRobot {
             }
         }, 100, 10, TimeUnit.MILLISECONDS);
 
+        DataLogManager.start();
+        DataLog log = DataLogManager.getLog();
+        myDoubleLog = new DoubleLogEntry(log, "Drivetrain Encoder Values");
+
     }
 
     @Override
@@ -112,9 +118,12 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         //double[] yawPitchRoll = new double[3];
         //Robot.getDataLogger().getPigeon().getYawPitchRoll(yawPitchRoll);
-        double positionData = Robot.getDrivetrain().getPosition();
         //double angleData = Robot.getDrivetrain().getAngle();
-        dataLogger.logData(positionData);
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        myDoubleLog.append(Robot.getDrivetrain().getPosition());
     }
 
     @Override
