@@ -4,6 +4,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.Pigeon2;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.troyargonauts.common.motors.MotorCreation;
@@ -37,6 +40,8 @@ public class DriveTrain extends SubsystemBase {
     public short[] pigeonAccelValue = new short[3];
 
     private final DualSpeedTransmission dualSpeedTransmission;
+
+    private final DoubleLogEntry drivetrainEncoderLog;
     private static final StatorCurrentLimitConfiguration CURRENT_LIMIT = new StatorCurrentLimitConfiguration(
             true, 60, 60,0.2
     );
@@ -67,6 +72,9 @@ public class DriveTrain extends SubsystemBase {
 
         rightSide.forEach(talonFX -> talonFX.setGearingParameters(gearingLowGear));
         leftSide.forEach(talonFX -> talonFX.setGearingParameters(gearingLowGear));
+
+        DataLog log = DataLogManager.getLog();
+        drivetrainEncoderLog = new DoubleLogEntry(log, "Drivetrain Encoder Values");
     }
 
     @Override
@@ -78,6 +86,9 @@ public class DriveTrain extends SubsystemBase {
         SmartDashboard.putNumber("Pigeon Roll", pigeonRoll);
 
         pigeon.getBiasedAccelerometer(pigeonAccelValue);
+
+        drivetrainEncoderLog.append(getPosition());
+
     }
 
     /**

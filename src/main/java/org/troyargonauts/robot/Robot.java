@@ -22,9 +22,12 @@ import org.troyargonauts.robot.auton.routines.*;
 import org.troyargonauts.robot.commands.StartingSequence;
 import org.troyargonauts.robot.subsystems.*;
 
+import java.util.Timer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.Timer.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -47,6 +50,9 @@ public class Robot extends TimedRobot {
     //private static DataLogging dataLogger;
 
     private static DoubleLogEntry myDoubleLog;
+    private static DoubleLogEntry wristDoubleLog;
+    private static DoubleLogEntry armDoubleLog;
+    private static DoubleLogEntry elevatorDoubleLog;
 
     public static LEDSystem getLEDSystem() {
         if (ledSystem == null) ledSystem = new LEDSystem();
@@ -108,9 +114,6 @@ public class Robot extends TimedRobot {
         }, 100, 10, TimeUnit.MILLISECONDS);
 
         DataLogManager.start();
-        DataLog log = DataLogManager.getLog();
-        myDoubleLog = new DoubleLogEntry(log, "Drivetrain Encoder Values");
-
     }
 
     @Override
@@ -123,7 +126,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        myDoubleLog.append(Robot.getDrivetrain().getPosition());
     }
 
     @Override
@@ -186,10 +188,10 @@ public class Robot extends TimedRobot {
         return elevator;
     }
 
-    public static DataLogging getDataLogger(){
-        if(dataLogger == null) dataLogger = new DataLogging();
-        return dataLogger;
-    }
+//    public static DataLogging getDataLogger(){
+//        if(dataLogger == null) dataLogger = new DataLogging();
+//        return dataLogger;
+//    }
     public void resetAllEncoders() {
         driveTrain.resetEncoders();
         elevator.resetEncoders();

@@ -133,4 +133,8 @@ public class Wrist extends SubsystemBase {
 	public void setDirectPower(double power) {
 		wristMotor.set(power);
 	}
+
+	public double getPosition() {
+		return wristMotor.getEncoder().getPosition();
+	}
 }
