@@ -1,6 +1,9 @@
 package org.troyargonauts.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,6 +17,8 @@ public class Wrist extends SubsystemBase {
 	private final LazyCANSparkMax wristMotor, rotateMotor;
 	private double desiredTarget;
 	private final DigitalInput upLimitWrist, downLimitWrist;
+
+	private DoubleLogEntry wristEncoderLog;
 
 	public Wrist() {
 		wristMotor = MotorCreation.createDefaultSparkMax(WRIST_PORT);
@@ -37,6 +42,9 @@ public class Wrist extends SubsystemBase {
 		wristMotor.getPIDController().setOutputRange(-0.4, 0.4);
 
 		wristMotor.burnFlash();
+
+		DataLog log = DataLogManager.getLog();
+		wristEncoderLog = new DoubleLogEntry(log, "Wrist Encoder Values");
 	}
 
 	@Override
@@ -53,6 +61,7 @@ public class Wrist extends SubsystemBase {
 		} else if (!downLimitWrist.get()) {
 			wristMotor.getEncoder().setPosition(0);
 		}
+		wristEncoderLog.append(getPosition());
 	}
 
 	public void run() {

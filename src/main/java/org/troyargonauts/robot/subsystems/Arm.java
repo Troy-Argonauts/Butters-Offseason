@@ -2,6 +2,9 @@ package org.troyargonauts.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,13 +17,15 @@ import static org.troyargonauts.robot.Constants.Arm.*;
 /**
  * Class representing arm. Includes PID control and absolute encoders
  *
- * @author TeoElRey, ASH-will-WIN, SolidityContract
+ * @author TeoElRey, ASH-will-WIN, SolidityContract, SavageCabbage360
  */
 public class Arm extends SubsystemBase {
     private final LazyCANSparkMax armMotor;
     private final DigitalInput upLimitArm, downLimitArm;
 
     private double desiredTarget;
+
+    private DoubleLogEntry armEncoderLog;
 
     /**
      * Here, the motors, absolute encoders, and PID Controller are instantiated.
@@ -44,6 +49,10 @@ public class Arm extends SubsystemBase {
         armMotor.getPIDController().setOutputRange(-0.40, 0.40);
 
         armMotor.burnFlash();
+
+        DataLog log = DataLogManager.getLog();
+        armEncoderLog = new DoubleLogEntry(log, "Arm Encoder Values");
+
     }
 
     @Override
@@ -61,6 +70,8 @@ public class Arm extends SubsystemBase {
         if (!downLimitArm.get()) {
             armMotor.getEncoder().setPosition(6890);
         }
+
+        armEncoderLog.append(getPosition());
     }
 
     public void run() {
@@ -123,6 +134,10 @@ public class Arm extends SubsystemBase {
 
     public boolean isPIDFinished() {
         return Math.abs(desiredTarget - armMotor.getEncoder().getPosition()) <= 50;
+    }
+
+    public double getPosition() {
+        return armMotor.getEncoder().getPosition();
     }
 
 }

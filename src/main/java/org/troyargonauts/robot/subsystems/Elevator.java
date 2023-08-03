@@ -1,6 +1,9 @@
 package org.troyargonauts.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,6 +22,8 @@ public class Elevator extends SubsystemBase {
     private final DigitalInput bottomLimitSwitch, upperLimitSwitch;
     private double elevatorEncoder;
     private double desiredTarget;
+
+    private DoubleLogEntry elevatorEncoderLog;
 
     /**
      * Instantiates the motor controllers, limit switches, encoder, and PID controller for the Elevator.
@@ -48,6 +53,9 @@ public class Elevator extends SubsystemBase {
         elevatorMotor.getPIDController().setD(ELEV_D);
 
         elevatorMotor.getPIDController().setOutputRange(-0.35, 0.35);
+
+        DataLog log = DataLogManager.getLog();
+        elevatorEncoderLog = new DoubleLogEntry(log, "Elevator Encoder Values");
     }
 
     /**
@@ -74,6 +82,8 @@ public class Elevator extends SubsystemBase {
         if (!upperLimitSwitch.get()) {
             elevatorMotor.getEncoder().setPosition(ElevatorState.MAX.getEncoderPosition());
         }
+
+        elevatorEncoderLog.append(getPosition());
     }
 
     public void run() {
@@ -127,5 +137,9 @@ public class Elevator extends SubsystemBase {
 
     public boolean isPIDFinished() {
         return Math.abs(desiredTarget - elevatorMotor.getEncoder().getPosition()) <= 5;
+    }
+
+    public double getPosition() {
+        return elevatorMotor.getEncoder().getPosition();
     }
 }
