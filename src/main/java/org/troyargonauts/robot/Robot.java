@@ -47,12 +47,7 @@ public class Robot extends TimedRobot {
     private boolean hasWristLimitBeenPressed = false;
     private Command autonomousCommand;
 
-    //private static DataLogging dataLogger;
-
-    private static DoubleLogEntry myDoubleLog;
-    private static DoubleLogEntry wristDoubleLog;
-    private static DoubleLogEntry armDoubleLog;
-    private static DoubleLogEntry elevatorDoubleLog;
+    private static DataLogging dataLogger;
 
     public static LEDSystem getLEDSystem() {
         if (ledSystem == null) ledSystem = new LEDSystem();
@@ -64,7 +59,7 @@ public class Robot extends TimedRobot {
         LiveWindow.disableAllTelemetry();
         LiveWindow.setEnabled(false);
 
-        //dataLogger = new DataLogging();
+        dataLogger = new DataLogging();
         driveTrain = new DriveTrain();
         arm = new Arm();
         elevator = new Elevator();
@@ -188,10 +183,11 @@ public class Robot extends TimedRobot {
         return elevator;
     }
 
-//    public static DataLogging getDataLogger(){
-//        if(dataLogger == null) dataLogger = new DataLogging();
-//        return dataLogger;
-//    }
+    public static DataLogging getDataLogger(){
+        if(dataLogger == null) dataLogger = new DataLogging();
+        return dataLogger;
+    }
+
     public void resetAllEncoders() {
         driveTrain.resetEncoders();
         elevator.resetEncoders();
