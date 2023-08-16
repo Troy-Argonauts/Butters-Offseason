@@ -19,7 +19,11 @@ public class Wrist extends SubsystemBase {
 	private final DigitalInput upLimitWrist, downLimitWrist;
 
 	private DoubleLogEntry wristEncoderLog;
-
+	private DoubleLogEntry rollerEncoderLog;
+	private DoubleLogEntry wristCurrentOutput;
+	private DoubleLogEntry rollerCurrentOutput;
+	private DoubleLogEntry wristBusVoltage;
+	private DoubleLogEntry rollerBusVoltage;
 	public Wrist() {
 		wristMotor = MotorCreation.createDefaultSparkMax(WRIST_PORT);
 		rotateMotor = MotorCreation.createDefaultSparkMax(ROTATE_PORT);
@@ -45,6 +49,11 @@ public class Wrist extends SubsystemBase {
 
 		DataLog log = DataLogManager.getLog();
 		wristEncoderLog = new DoubleLogEntry(log, "Wrist Encoder Values");
+		rollerEncoderLog = new DoubleLogEntry(log, "Roller Encoder Values");
+		wristCurrentOutput = new DoubleLogEntry(log, "Wrist Motor Current Output");
+		rollerCurrentOutput = new DoubleLogEntry(log, "Roller Motor Current Output");
+		wristBusVoltage = new DoubleLogEntry(log, "Wrist Motor Bus Voltage");
+		rollerBusVoltage = new DoubleLogEntry(log, "Roller Motor Bus Voltage");
 	}
 
 	@Override
@@ -62,6 +71,11 @@ public class Wrist extends SubsystemBase {
 			wristMotor.getEncoder().setPosition(0);
 		}
 		wristEncoderLog.append(getPosition());
+		rollerEncoderLog.append(getPosition());
+		wristCurrentOutput.append(wristMotor.getOutputCurrent());
+		rollerCurrentOutput.append(rotateMotor.getOutputCurrent());
+		wristBusVoltage.append(wristMotor.getBusVoltage());
+		rollerBusVoltage.append(rotateMotor.getBusVoltage());
 	}
 
 	public void run() {

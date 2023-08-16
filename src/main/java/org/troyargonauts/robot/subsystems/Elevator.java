@@ -25,6 +25,8 @@ public class Elevator extends SubsystemBase {
 
     private DoubleLogEntry elevatorEncoderLog;
 
+    private DoubleLogEntry elevatorOutputCurrentLog;
+    private DoubleLogEntry elevatorBusVoltage;
     /**
      * Instantiates the motor controllers, limit switches, encoder, and PID controller for the Elevator.
      * Additionally, the left side motor is set to be inverted
@@ -56,6 +58,8 @@ public class Elevator extends SubsystemBase {
 
         DataLog log = DataLogManager.getLog();
         elevatorEncoderLog = new DoubleLogEntry(log, "Elevator Encoder Values");
+        elevatorOutputCurrentLog = new DoubleLogEntry(log, "Elevator Motor Output Current ");
+        elevatorBusVoltage = new DoubleLogEntry((log, "Elevator Motor Bus Voltage"));
     }
 
     /**
@@ -84,6 +88,10 @@ public class Elevator extends SubsystemBase {
         }
 
         elevatorEncoderLog.append(getPosition());
+        elevatorOutputCurrentLog.append(elevatorMotor.getOutputCurrent());
+        elevatorBusVoltage.append(elevatorMotor.getBusVoltage());
+
+
     }
 
     public void run() {

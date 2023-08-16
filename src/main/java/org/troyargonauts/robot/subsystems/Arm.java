@@ -26,7 +26,8 @@ public class Arm extends SubsystemBase {
     private double desiredTarget;
 
     private DoubleLogEntry armEncoderLog;
-
+    private DoubleLogEntry armCurrentOutput;
+    private DoubleLogEntry armBusVoltage;
     /**
      * Here, the motors, absolute encoders, and PID Controller are instantiated.
      */
@@ -52,7 +53,8 @@ public class Arm extends SubsystemBase {
 
         DataLog log = DataLogManager.getLog();
         armEncoderLog = new DoubleLogEntry(log, "Arm Encoder Values");
-
+        armCurrentOutput = new DoubleLogEntry(log, "Arm Current Output");
+        armBusVoltage = new DoubleLogEntry(log, "Arm Bus Voltage");
     }
 
     @Override
@@ -63,6 +65,7 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putBoolean("up limit arm", !upLimitArm.get());
         SmartDashboard.putBoolean("down limit arm", !downLimitArm.get());
 
+
         if (!upLimitArm.get()) {
             armMotor.getEncoder().setPosition(0);
         }
@@ -72,6 +75,8 @@ public class Arm extends SubsystemBase {
         }
 
         armEncoderLog.append(getPosition());
+        armCurrentOutput.append(armMotor.getOutputCurrent());
+        armBusVoltage.append(armMotor.getBusVoltage());
     }
 
     public void run() {

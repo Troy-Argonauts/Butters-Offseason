@@ -42,6 +42,8 @@ public class DriveTrain extends SubsystemBase {
     private final DualSpeedTransmission dualSpeedTransmission;
 
     private final DoubleLogEntry drivetrainEncoderLog;
+    private DoubleLogEntry rightSideCurrentOutput;
+    private DoubleLogEntry leftSideCurrentOutput;
     private static final StatorCurrentLimitConfiguration CURRENT_LIMIT = new StatorCurrentLimitConfiguration(
             true, 60, 60,0.2
     );
@@ -75,6 +77,8 @@ public class DriveTrain extends SubsystemBase {
 
         DataLog log = DataLogManager.getLog();
         drivetrainEncoderLog = new DoubleLogEntry(log, "Drivetrain Encoder Values");
+        rightSideCurrentOutput = new DoubleLogEntry(log, "Right Side Current Output");
+        leftSideCurrentOutput = new DoubleLogEntry(log, "Left Side Current Output");
     }
 
     @Override
