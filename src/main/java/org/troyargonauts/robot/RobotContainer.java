@@ -39,12 +39,12 @@ public class RobotContainer {
                 new RunCommand(
                         () -> {
                             motors.set(control.getLeftX());
-                        }
+                        }, motors
                 )
         );
 
-        control.a().onTrue(new InstantCommand(pneumatics::forward));
-        control.b().onTrue(new InstantCommand(pneumatics::backward));
-        control.x().onTrue(new InstantCommand(pneumatics::off));
+        control.a().onTrue(new InstantCommand(pneumatics::forward, pneumatics));
+        control.b().onTrue(new InstantCommand(pneumatics::backward, pneumatics));
+        control.x().onTrue(new InstantCommand(pneumatics::off, pneumatics));
     }
 }

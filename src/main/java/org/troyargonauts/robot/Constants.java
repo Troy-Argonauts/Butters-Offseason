@@ -2,10 +2,10 @@ package org.troyargonauts.robot;
 
 public final class Constants {
     public interface Motors {
-        int ONE_ID = 0;
-        int TWO_ID = 1;
-        int THREE_ID = 2;
-        int FOUR_ID = 3;
+        int ONE_ID = 1;
+        int TWO_ID = 2;
+        int THREE_ID = 3;
+        int FOUR_ID = 4;
     }
 
     public interface Pneumatics {
