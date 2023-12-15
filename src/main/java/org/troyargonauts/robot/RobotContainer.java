@@ -7,6 +7,7 @@ package org.troyargonauts.robot;
 
 import static org.troyargonauts.robot.Constants.Controller.*;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -21,8 +22,8 @@ import org.troyargonauts.robot.subsystems.Pneumatics;
  */
 public class RobotContainer {
 
-    Motors motors = new Motors();
-    Pneumatics pneumatics = new Pneumatics();
+    static Motors motors = new Motors();
+    static Pneumatics pneumatics = new Pneumatics();
 
     CommandXboxController control = new CommandXboxController(CONTROL_ID);
 
@@ -43,8 +44,8 @@ public class RobotContainer {
                 )
         );
 
-        control.a().onTrue(new InstantCommand(pneumatics::forward, pneumatics));
-        control.b().onTrue(new InstantCommand(pneumatics::backward, pneumatics));
-        control.x().onTrue(new InstantCommand(pneumatics::off, pneumatics));
+        control.a().onTrue(new InstantCommand(() -> pneumatics.setState(DoubleSolenoid.Value.kForward), pneumatics));
+        control.b().onTrue(new InstantCommand(() -> pneumatics.setState(DoubleSolenoid.Value.kReverse), pneumatics));
+        control.x().onTrue(new InstantCommand(() -> pneumatics.setState(DoubleSolenoid.Value.kOff), pneumatics));
     }
 }
